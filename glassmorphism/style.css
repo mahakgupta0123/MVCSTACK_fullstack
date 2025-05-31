@@ -1,0 +1,64 @@
+body {
+  background-color: #000;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.05) 1.5px,
+      transparent 1.5px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px);
+  background-size: 30px 30px;
+}
+
+.smallCircle {
+  background-color: #fe317e;
+  height: 140px;
+  width: 140px;
+  border-radius: 50%;
+  position: relative;
+  left: 350px;
+  top: 400px;
+}
+
+.largeCircle {
+  background-color: #cb4bee;
+  height: 280px;
+  width: 280px;
+  border-radius: 50%;
+  position: absolute;
+  left: 600px;
+  top: 100px;
+}
+
+.mediumCircle {
+  background-color: #0afe00;
+  height: 170px;
+  width: 170px;
+  border-radius: 50%;
+  position: absolute;
+  left: 900px;
+  top: 350px;
+}
+
+.glassRectangle {
+  background-color: #3b3b3b;
+  height: 280px;
+  width: 600px;
+  border-radius: 20px;
+  /* border: 2px solid #ccc; */
+  position: absolute;
+  left: 400px;
+  top: 200px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  background-image: url('grain-texture.png');
+  background-blend-mode: overlay;
+  color: white;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  font-family: 'Oleo Script', system-ui;
+}
