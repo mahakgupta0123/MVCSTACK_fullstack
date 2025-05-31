@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div style="display: flex; flex-wrap: wrap">
+      <% for(data of datas) { %>
+      <div
+        style="
+          border: 2px solid black;
+          padding: 10px;
+          margin: 10px;
+          height: 250px;
+          width: 300px;
+        "
+      >
+        <img src="<%= data.image %>" height="100px" width="300px" />
+        <p><b><%= data.title %></b></p>
+        <p><%= data.description %></p>
+        <p style="display: inline"><%= data.price %></p>
+        |
+        <p style="display: inline"><%= data.location %></p>
+        |
+        <p style="display: inline"><%= data.country %></p>
+      </div>
+      <% } %>
+    </div>
+  </body>
+</html>
