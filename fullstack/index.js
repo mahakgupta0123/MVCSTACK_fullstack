@@ -47,10 +47,17 @@ app.get('/listings/new', (req, res) => {
   res.render('form.ejs')
 })
 
-app.post("/listings",(req,res)=>{
-  let {title,description,price,location}=req.body;
-  console.log(req.body)
-  res.redirect("/listings")
+app.post('/listings', async (req, res) => {
+  let { title, description,image, price, location } = req.body
+  let listing2 = new listing({
+    title: title,
+    description: description,
+    image:image,
+    price: price,
+    location: location
+  })
+  await listing2.save()
+  res.redirect('/listings')
 })
 
 app.get('/listings/:id', async (req, res) => {
@@ -58,7 +65,6 @@ app.get('/listings/:id', async (req, res) => {
   let data = await listing.findById(id)
   res.render('listing.ejs', { data })
 })
-
 
 app.listen(port, (req, res) => {
   console.log('server is running')
