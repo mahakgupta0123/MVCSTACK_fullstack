@@ -6,6 +6,7 @@
     <title>Document</title>
   </head>
   <body>
+    <a href="http://localhost:8080/listings/new"><button>ADD more</button></a>
     <div style="display: flex; flex-wrap: wrap">
       <% for(data of datas) { %>
       <div
@@ -13,7 +14,7 @@
           border: 2px solid black;
           padding: 10px;
           margin: 10px;
-          height: 250px;
+          height: 280px;
           width: 300px;
         "
       >
@@ -25,6 +26,9 @@
         <p style="display: inline"><%= data.location %></p>
         |
         <p style="display: inline"><%= data.country %></p>
+        <br>
+        <br>
+        <a href="http://localhost:8080/listings/<%=data.id%>"><button>Show more</button></a>
       </div>
       <% } %>
     </div>
