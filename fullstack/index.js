@@ -4,10 +4,12 @@ const port = 8080
 const mongoose = require('mongoose')
 const listing = require('./models/listings.js')
 const path = require('path')
+var methodOverride = require('method-override')
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.set('views', path.join(__dirname, '/views'))
+app.use(methodOverride('_method'))
 
 main()
   .then(res => {
@@ -48,11 +50,11 @@ app.get('/listings/new', (req, res) => {
 })
 
 app.post('/listings', async (req, res) => {
-  let { title, description,image, price, location } = req.body
+  let { title, description, image, price, location } = req.body
   let listing2 = new listing({
     title: title,
     description: description,
-    image:image,
+    image: image,
     price: price,
     location: location
   })
@@ -66,6 +68,30 @@ app.get('/listings/:id', async (req, res) => {
   res.render('listing.ejs', { data })
 })
 
+app.get('/listings/:id/edit', async (req, res) => {
+  let { id } = req.params
+  let data = await listing.findById(id)
+  res.render('edit.ejs', { data })
+})
+
+app.put('/listings/:id', async (req, res) => {
+  let { id } = req.params
+  let { title, description, image, price, location } = req.body
+  console.log(req.body)
+  let newListings = await listing.findByIdAndUpdate(
+    id,
+    {
+      title: title,
+      description: description,
+      image: image,
+      price: price,
+      location: location
+    },
+    { new: true, runValidators: true }
+  )
+  console.log(newListings)
+  res.redirect('/listings')
+})
 app.listen(port, (req, res) => {
   console.log('server is running')
 })

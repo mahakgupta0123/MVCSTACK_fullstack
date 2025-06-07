@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>UPDATE YOUR LISTING</h1>
+    <form method="post" action="/listings/<%= data.id %>?_method=PUT"> 
+        title: <textarea type="text" name="title" placeholder="edit your title"> <%=data.title %></textarea><br><br>
+        description:<textarea type="text" name="description" placeholder="edit your title"> <%=data.description %></textarea><br><br>
+        image:<textarea type="text" name="image" placeholder="edit your title"> <%=data.image %></textarea><br><br>
+        price: <textarea type="text" name="price" placeholder="edit your title"> <%=data.price %></textarea><br><br>
+        location: <textarea type="text" name="location" placeholder="edit your title"> <%=data.location %></textarea><br><br>
+        <button>submit and edit</button>
+    </form>
+</body>
+</html>
