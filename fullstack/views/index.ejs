@@ -29,7 +29,8 @@
         <br>
         <br>
         <a href="http://localhost:8080/listings/<%=data.id%>"><button>Show more</button></a>
-        <form style="display:inline;" method="get" action="/listings/<%= data.id%>/edit"><button>Edit and update</button></form>
+        <form style="display:inline;" method="get" action="/listings/<%= data.id%>/edit"><button>Edit</button></form>
+        <form style="display:inline;" method="post" action="/listings/<%= data.id%>?_method=DELETE"><button>Delete Listings</button></form>
       </div>
       <% } %>
     </div>

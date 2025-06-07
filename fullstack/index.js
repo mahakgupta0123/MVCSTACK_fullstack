@@ -92,6 +92,14 @@ app.put('/listings/:id', async (req, res) => {
   console.log(newListings)
   res.redirect('/listings')
 })
+
+app.delete('/listings/:id', async (req, res) => {
+  let { id } = req.params
+  let data = await listing.findByIdAndDelete(id)
+  console.log(data)
+  res.redirect('/listings')
+})
+
 app.listen(port, (req, res) => {
   console.log('server is running')
 })
