@@ -1,38 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <a href="http://localhost:8080/listings/new"><button>ADD more</button></a>
-    <div style="display: flex; flex-wrap: wrap">
-      <% for(data of datas) { %>
-      <div
-        style="
-          border: 2px solid black;
-          padding: 10px;
-          margin: 10px;
-          height: 280px;
-          width: 300px;
-        "
-      >
-        <img src="<%= data.image %>" height="100px" width="300px" />
-        <p><b><%= data.title %></b></p>
-        <p><%= data.description %></p>
-        <p style="display: inline"><%= data.price %></p>
-        |
-        <p style="display: inline"><%= data.location %></p>
-        |
-        <p style="display: inline"><%= data.country %></p>
-        <br>
-        <br>
-        <a href="http://localhost:8080/listings/<%=data.id%>"><button>Show more</button></a>
-        <form style="display:inline;" method="get" action="/listings/<%= data.id%>/edit"><button>Edit</button></form>
-        <form style="display:inline;" method="post" action="/listings/<%= data.id%>?_method=DELETE"><button>Delete Listings</button></form>
+<% layout('../layouts/boilerplate') %>
+
+<body>
+  <a href="http://localhost:8080/listings/new"><button>ADD more</button></a>
+  <div style="display:flex; flex-wrap:wrap; gap:2rem; justify-content: center; align-items: center;">
+    <% for(data of datas) { %>
+      <div class="card" style="width:300px; border:none">
+        <img src="<%= data.image %>" class="card-img-top" alt="listings" height="300px" style="border-radius:20px"/>
+        <div class="card-body">
+          <p class="card-text">
+            <b><%= data.title %></b>
+            <%= data.description %>
+          </p>
+          <p class="card-text"><%= data.price %></p>
+        </div>
+        </div>
+        <% } %>
       </div>
-      <% } %>
-    </div>
-  </body>
-</html>
+      <!-- <a href="http://localhost:8080/listings/<%=data.id%>"
+        ><button>Show more</button></a
+      >
+      <form method="get" action="/listings/<%= data.id%>/edit">
+        <button>Edit</button>
+      </form>
+      <form method="post" action="/listings/<%= data.id%>?_method=DELETE">
+        <button>Delete Listings</button>
+      </form> -->
+</body>
