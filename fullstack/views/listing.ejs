@@ -1,6 +1,44 @@
 <% layout('../layouts/boilerplate') %>
 <body>
+  <div
+    style="
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      gap:1rem
+    "
+  >
     <h1><%= data.title %></h1>
-    <p><%= data.description %></p>
-    <img src="<%= data.image %>" height="400px" width="100%" />
+    <h5 class="text-secondary"><%= data.description %></h5>
+    <img
+      src="<%= data.image %>"
+      height="300px"
+      width="60%"
+      class="rounded-5 mb-3"
+    />
+  </div>
+  <div
+    class="row"
+    style="
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      gap:0.25rem;
+    "
+  >
+    <div class="col-1 ms-5">
+      <form method="get" action="/listings/<%= data.id%>/edit">
+        <button class="fs-6 btn btn-outline-danger">Edit</button>
+      </form>
+    </div>
+    <div class="col-2">
+      <form method="post" action="/listings/<%= data.id%>?_method=DELETE">
+        <button class="fs-6 btn btn-outline-danger">
+          Delete Listings
+        </button>
+      </form>
+    </div>
+  </div>
 </body>

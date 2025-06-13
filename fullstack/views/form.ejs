@@ -1,13 +1,55 @@
-
 <% layout('../layouts/boilerplate') %>
 
 <body>
-    <form method="post" action="/listings">
-       title: <input type="text" name="title" placeholder="enter your title"><br><br>
-        description: <input type="text" name="description" placeholder="enter your description"><br><br>
-        image: <input name="image" type="text"><br><br>
-        price: <input name="price" type="number" placeholder="enter the price"><br><br>
-        location: <input name="location" type="text" placeholder="enter the location"><br><br>
-        <button>submit</button>
-    </form>
+  <form method="post" action="/listings">
+    <div class="container-xxl">
+      <div class="row">
+        <div class="col-md-6">
+          <label for="title">title:</label>
+          <input
+            type="text"
+            name="title"
+            id="title"
+            placeholder="enter your title"
+            class="rounded-5 p-2 border form-control"
+          /><br /><br />
+        </div>
+        <div class="col-md-6">
+          <label for="description">description:</label>
+          <input
+            type="text"
+            name="description"
+            id="description"
+            placeholder="enter your description"
+            class="rounded-5 p-2 border form-control"
+          /><br /><br />
+        </div>
+      </div>
+      <label for="image">image:</label>
+      <input
+        name="image"
+        type="text"
+        id="image"
+        placeholder="enter the image url"
+        class="rounded-5 p-2 border form-control"
+      /><br /><br />
+      <label for="price">price:</label>
+      <input
+        name="price"
+        type="number"
+        id="price"
+        placeholder="enter the price"
+        class="rounded-5 p-2 border form-control"
+      /><br /><br />
+      <label for="location">location:</label>
+      <input
+        name="location"
+        id="location"
+        type="text"
+        placeholder="enter the location"
+        class="rounded-5 p-2 border form-control"
+      /><br /><br />
+      <button class="btn btn-outline-danger">submit</button>
+    </div>
+  </form>
 </body>
