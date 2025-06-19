@@ -6,7 +6,7 @@
     <form method="post" action="/listings/<%= data.id %>?_method=PUT">
       title:
       <textarea
-        class="form-control rounded-2 p-2 text-center align-middle"
+        class="form-control rounded-2 p-2"
         name="title"
         placeholder="edit your title"
       >
@@ -14,7 +14,7 @@
       ><br /><br />
       description:<textarea
         style="padding-top:10px"
-        class="form-control rounded-2 text-center align-middle"
+        class="form-control rounded-2"
         type="text"
         name="description"
         placeholder="edit your title"
@@ -23,7 +23,7 @@
       ><br /><br />
       image:<textarea
         style="padding:10px"
-        class="form-control rounded-2 text-center align-middle"
+        class="form-control rounded-2"
         type="text"
         name="image"
         placeholder="edit your title"
@@ -34,7 +34,8 @@
         <div class="col-6">
           price:
           <textarea
-            class="form-control rounded-2 p-2 text-center align-middle"
+            style="padding:10px"
+            class="form-control rounded-2"
             type="text"
             name="price"
             placeholder="edit your title"
@@ -45,8 +46,8 @@
         <div class="col-6">
           location:
           <textarea
-            class="form-control rounded-2 p-2 text-center align-middle"
-            style="vertical-align: middle;"
+            style="padding:10px"
+            class="form-control rounded-2"
             type="text"
             name="location"
             placeholder="edit your title"
