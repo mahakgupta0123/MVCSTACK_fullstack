@@ -1,13 +1,61 @@
 <% layout('../layouts/boilerplate') %>
 
 <body>
-    <h1>UPDATE YOUR LISTING</h1>
-    <form method="post" action="/listings/<%= data.id %>?_method=PUT"> 
-        title: <textarea type="text" name="title" placeholder="edit your title"> <%=data.title %></textarea><br><br>
-        description:<textarea type="text" name="description" placeholder="edit your title"> <%=data.description %></textarea><br><br>
-        image:<textarea type="text" name="image" placeholder="edit your title"> <%=data.image %></textarea><br><br>
-        price: <textarea type="text" name="price" placeholder="edit your title"> <%=data.price %></textarea><br><br>
-        location: <textarea type="text" name="location" placeholder="edit your title"> <%=data.location %></textarea><br><br>
-        <button>submit and edit</button>
+  <div class="container" style="padding: 0 200px 0 200px">
+    <h1 class="text-left text-danger mt-3 mb-3">UPDATE YOUR LISTING</h1>
+    <form method="post" action="/listings/<%= data.id %>?_method=PUT">
+      title:
+      <textarea
+        class="form-control rounded-2 p-2 text-center align-middle"
+        name="title"
+        placeholder="edit your title"
+      >
+ <%=data.title %></textarea
+      ><br /><br />
+      description:<textarea
+        style="padding-top:10px"
+        class="form-control rounded-2 text-center align-middle"
+        type="text"
+        name="description"
+        placeholder="edit your title"
+      >
+ <%=data.description %></textarea
+      ><br /><br />
+      image:<textarea
+        style="padding:10px"
+        class="form-control rounded-2 text-center align-middle"
+        type="text"
+        name="image"
+        placeholder="edit your title"
+      >
+ <%=data.image %></textarea
+      ><br /><br />
+      <div class="row">
+        <div class="col-6">
+          price:
+          <textarea
+            class="form-control rounded-2 p-2 text-center align-middle"
+            type="text"
+            name="price"
+            placeholder="edit your title"
+          >
+ <%=data.price %></textarea
+          ><br /><br />
+        </div>
+        <div class="col-6">
+          location:
+          <textarea
+            class="form-control rounded-2 p-2 text-center align-middle"
+            style="vertical-align: middle;"
+            type="text"
+            name="location"
+            placeholder="edit your title"
+          >
+ <%=data.location %></textarea
+          ><br /><br />
+        </div>
+      </div>
+        <button class="btn btn-outline-danger text-center p-3">submit and edit</button>
     </form>
+  </div>
 </body>
