@@ -1,34 +1,38 @@
 <% layout('../layouts/boilerplate') %>
 
 <body>
-  <form method="post" action="/listings" class="needs-validation">
-    <div class="container-xxl" style="padding: 0 80px 0 80px" novalidate >
-      <div class="row">
-        <div class="col-md-6">
-          <label for="title">title:</label>
-          <input
-            type="text"
-            name="title"
-            id="title"
-            placeholder="enter your title"
-            class="rounded-5 p-2 border form-control"
-            required
-          /><br /><br />
-          <div class="valid-feedback">Looks good!</div>
-          <div class="invalid-feedback">Please provide a title.</div>
-        </div>
-        <div class="col-md-6">
-          <label for="description">description:</label>
-          <input
-            type="text"
-            name="description"
-            id="description"
-            placeholder="enter your description"
-            class="rounded-5 p-2 border form-control"
-            required
-          /><br /><br />
-        </div>
-      </div>
+  <form
+    class="row"
+    method="post"
+    action="/listings"
+    style="padding: 0 150px 0 150px"
+  >
+    <h1>Create your new listings</h1>
+    <div class="col-6">
+      <br />
+      <label for="title">title:</label>
+      <input
+        type="text"
+        name="title"
+        id="title"
+        placeholder="enter your title"
+        class="rounded-5 p-2 border form-control"
+        required
+      /><br /><br />
+    </div>
+    <div class="col-6">
+      <br />
+      <label for="description">description:</label>
+      <input
+        type="text"
+        name="description"
+        id="description"
+        placeholder="enter your description"
+        class="rounded-5 p-2 border form-control"
+        required
+      /><br /><br />
+    </div>
+    <div class="col-12">
       <label for="image">image:</label>
       <input
         name="image"
@@ -38,6 +42,8 @@
         class="rounded-5 p-2 border form-control"
         required
       /><br /><br />
+    </div>
+    <div class="col-6">
       <label for="price">price:</label>
       <input
         name="price"
@@ -47,6 +53,8 @@
         class="rounded-5 p-2 border form-control"
         required
       /><br /><br />
+    </div>
+    <div class="col-6">
       <label for="location">location:</label>
       <input
         name="location"
@@ -56,7 +64,10 @@
         class="rounded-5 p-2 border form-control"
         required
       /><br /><br />
-      <button class="btn btn-outline-danger">submit</button>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-outline-danger" type="submit">Submit form</button>
     </div>
   </form>
+  <!-- <script src="../public/js/script.js"></script> -->
 </body>
