@@ -3,7 +3,7 @@ const app = express()
 process.on('uncaughtException', err => {
   console.error('Uncaught Exception:', err.stack)
 })
-const Joi = require('joi');
+const listingSchema = require('listingSchema')
 const port = 8080
 const mongoose = require('mongoose')
 const listing = require('./models/listings.js')
@@ -69,6 +69,9 @@ app.post(
   '/listings',
   wrapAsync(async (req, res) => {
     const { title, description, image, price, location } = req.body
+
+    let result = listingSchema.validate(req.body)
+    console.log(result)
 
     const newListing = new listing({
       title,
@@ -138,9 +141,9 @@ app.all(/.*/, (req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-  let { status = 500, message = 'Something went wrong' } = err;
-  res.status(status).render('error.ejs', { message }); 
-});
+  let { status = 500, message = 'Something went wrong' } = err
+  res.status(status).render('error.ejs', { message })
+})
 
 app.listen(port, (req, res) => {
   console.log('server is running')
