@@ -1,8 +1,8 @@
 const express = require('express')
 const app = express()
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err.stack);
-});
+process.on('uncaughtException', err => {
+  console.error('Uncaught Exception:', err.stack)
+})
 const port = 8080
 const mongoose = require('mongoose')
 const listing = require('./models/listings.js')
@@ -42,17 +42,16 @@ async function main () {
 //     res.send("saved successfully")
 // })
 
-
 app.use((req, res, next) => {
-  console.log('Request URL:', req.url);
-  next();
-});
+  console.log('Request URL:', req.url)
+  next()
+})
 
 app.get(
   '/listings',
   wrapAsync(async (req, res, next) => {
     let datas = await listing.find()
-    res.render('index.ejs', { datas })
+    res.render('index.ejs', { datas,layout: 'layouts/boilerplate' })
     // console.log(datas);
   })
 )
@@ -62,30 +61,33 @@ app.get(
 // })
 
 app.get('/listings/new', (req, res) => {
-  res.render('form.ejs')
+  res.render('form.ejs',  { layout: 'layouts/boilerplate' })
 })
 
-app.post('/listings', wrapAsync(async (req, res) => {
-  const { title, description, image, price, location } = req.body;
+app.post(
+  '/listings',
+  wrapAsync(async (req, res) => {
+    const { title, description, image, price, location } = req.body
 
-  const newListing = new listing({
-    title,
-    description,
-    image,
-    price,
-    location
-  });
+    const newListing = new listing({
+      title,
+      description,
+      image,
+      price,
+      location
+    })
 
-  await newListing.save();
-  res.redirect('/listings'); 
-}));
+    await newListing.save()
+    res.redirect('/listings')
+  })
+)
 
 app.get(
   '/listings/:id',
   wrapAsync(async (req, res) => {
     let { id } = req.params
     let data = await listing.findById(id)
-    res.render('listing.ejs', { data })
+    res.render('listing.ejs', { data ,layout: 'layouts/boilerplate' })
   })
 )
 
@@ -94,7 +96,7 @@ app.get(
   wrapAsync(async (req, res) => {
     let { id } = req.params
     let data = await listing.findById(id)
-    res.render('edit.ejs', { data })
+   res.render('edit.ejs', { data, layout: 'layouts/boilerplate' });
   })
 )
 
@@ -131,15 +133,14 @@ app.delete(
 )
 
 app.all(/.*/, (req, res, next) => {
-  next(new ExpressError(404, 'Page not found'));
-});
-
+  next(new ExpressError(404, 'Page not found'))
+})
 
 app.use((err, req, res, next) => {
-  let { status = 500, message = 'Something went wrong' } = err;
-  res.status(status).send(message);
-});
-
+  let { status = 500, message = 'Something went wrong' } = err
+  res.status(status).send(message)
+  res.render('error.ejs', { message })
+})
 
 app.listen(port, (req, res) => {
   console.log('server is running')
