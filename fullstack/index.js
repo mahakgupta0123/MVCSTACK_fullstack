@@ -1,5 +1,8 @@
 const express = require('express')
 const app = express()
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err.stack);
+});
 const port = 8080
 const mongoose = require('mongoose')
 const listing = require('./models/listings.js')
@@ -62,22 +65,20 @@ app.get('/listings/new', (req, res) => {
   res.render('form.ejs')
 })
 
-app.post('/listings', async (req, res, next) => {
-  try {
-    let { title, description, image, price, location } = req.body;
-    let listing2 = new listing({
-      title,
-      description,
-      image,
-      price,
-      location
-    });
-    await listing2.save();
-    res.redirect('/listings');
-  } catch (err) {
-    next(err);
-  }
-});
+app.post('/listings', wrapAsync(async (req, res) => {
+  const { title, description, image, price, location } = req.body;
+
+  const newListing = new listing({
+    title,
+    description,
+    image,
+    price,
+    location
+  });
+
+  await newListing.save();
+  res.redirect('/listings'); 
+}));
 
 app.get(
   '/listings/:id',
@@ -129,10 +130,16 @@ app.delete(
   })
 )
 
+app.all(/.*/, (req, res, next) => {
+  next(new ExpressError(404, 'Page not found'));
+});
+
+
 app.use((err, req, res, next) => {
-  let { status, message } = err
-  res.status(status).send(message)
-})
+  let { status = 500, message = 'Something went wrong' } = err;
+  res.status(status).send(message);
+});
+
 
 app.listen(port, (req, res) => {
   console.log('server is running')
