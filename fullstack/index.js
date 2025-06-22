@@ -3,7 +3,7 @@ const app = express()
 process.on('uncaughtException', err => {
   console.error('Uncaught Exception:', err.stack)
 })
-const listingSchema = require('listingSchema')
+const listingSchema = require('./schema')
 const port = 8080
 const mongoose = require('mongoose')
 const listing = require('./models/listings.js')
@@ -48,6 +48,14 @@ app.use((req, res, next) => {
   next()
 })
 
+const validateListings = (req, res, next) => {
+  let { error } = listingSchema.validate(req.body)
+  if (error) {
+    throw new ExpressError(400, error)
+  } else {
+    next()
+  }
+}
 app.get(
   '/listings',
   wrapAsync(async (req, res, next) => {
@@ -67,11 +75,9 @@ app.get('/listings/new', (req, res) => {
 
 app.post(
   '/listings',
+  validateListings,
   wrapAsync(async (req, res) => {
     const { title, description, image, price, location } = req.body
-
-    let result = listingSchema.validate(req.body)
-    console.log(result)
 
     const newListing = new listing({
       title,
@@ -106,6 +112,7 @@ app.get(
 
 app.put(
   '/listings/:id',
+  validateListings,
   wrapAsync(async (req, res) => {
     let { id } = req.params
     let { title, description, image, price, location } = req.body
