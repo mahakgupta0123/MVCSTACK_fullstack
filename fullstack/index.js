@@ -3,15 +3,17 @@ const app = express()
 const port = 8080
 const mongoose = require('mongoose')
 const listing = require('./models/listings.js')
-const engine= require("ejs-mate")
-app.engine('ejs', engine);
+const wrapAsync = require('./utils/wrapAsync.js')
+const ExpressError = require('./utils/ExpressError.js')
+const engine = require('ejs-mate')
+app.engine('ejs', engine)
 const path = require('path')
 var methodOverride = require('method-override')
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.set('views', path.join(__dirname, '/views'))
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(methodOverride('_method'))
 main()
   .then(res => {
@@ -37,11 +39,20 @@ async function main () {
 //     res.send("saved successfully")
 // })
 
-app.get('/listings', async (req, res) => {
-  let datas = await listing.find()
-  res.render('index.ejs', { datas })
-  // console.log(datas);
-})
+
+app.use((req, res, next) => {
+  console.log('Request URL:', req.url);
+  next();
+});
+
+app.get(
+  '/listings',
+  wrapAsync(async (req, res, next) => {
+    let datas = await listing.find()
+    res.render('index.ejs', { datas })
+    // console.log(datas);
+  })
+)
 
 // app.get('/', (req, res) => {
 //   res.send('hello, root')
@@ -51,55 +62,76 @@ app.get('/listings/new', (req, res) => {
   res.render('form.ejs')
 })
 
-app.post('/listings', async (req, res) => {
-  let { title, description, image, price, location } = req.body
-  let listing2 = new listing({
-    title: title,
-    description: description,
-    image: image,
-    price: price,
-    location: location
+app.post('/listings', async (req, res, next) => {
+  try {
+    let { title, description, image, price, location } = req.body;
+    let listing2 = new listing({
+      title,
+      description,
+      image,
+      price,
+      location
+    });
+    await listing2.save();
+    res.redirect('/listings');
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get(
+  '/listings/:id',
+  wrapAsync(async (req, res) => {
+    let { id } = req.params
+    let data = await listing.findById(id)
+    res.render('listing.ejs', { data })
   })
-  await listing2.save()
-  res.redirect('/listings')
-})
+)
 
-app.get('/listings/:id', async (req, res) => {
-  let { id } = req.params
-  let data = await listing.findById(id)
-  res.render('listing.ejs', { data })
-})
+app.get(
+  '/listings/:id/edit',
+  wrapAsync(async (req, res) => {
+    let { id } = req.params
+    let data = await listing.findById(id)
+    res.render('edit.ejs', { data })
+  })
+)
 
-app.get('/listings/:id/edit', async (req, res) => {
-  let { id } = req.params
-  let data = await listing.findById(id)
-  res.render('edit.ejs', { data })
-})
+app.put(
+  '/listings/:id',
+  wrapAsync(async (req, res) => {
+    let { id } = req.params
+    let { title, description, image, price, location } = req.body
+    console.log(req.body)
+    let newListings = await listing.findByIdAndUpdate(
+      id,
+      {
+        title: title,
+        description: description,
+        image: image,
+        price: price,
+        location: location
+      },
+      { new: true, runValidators: true }
+    )
+    console.log(newListings)
+    res.redirect('/listings')
+  })
+)
 
-app.put('/listings/:id', async (req, res) => {
-  let { id } = req.params
-  let { title, description, image, price, location } = req.body
-  console.log(req.body)
-  let newListings = await listing.findByIdAndUpdate(
-    id,
-    {
-      title: title,
-      description: description,
-      image: image,
-      price: price,
-      location: location
-    },
-    { new: true, runValidators: true }
-  )
-  console.log(newListings)
-  res.redirect('/listings')
-})
+app.delete(
+  '/listings/:id',
+  wrapAsync(async (req, res) => {
+    let { id } = req.params
+    let data = await listing.findByIdAndDelete(id)
+    console.log(data)
+    res.redirect('/listings')
+  })
+)
 
-app.delete('/listings/:id', async (req, res) => {
-  let { id } = req.params
-  let data = await listing.findByIdAndDelete(id)
-  console.log(data)
-  res.redirect('/listings')
+app.use((err, req, res, next) => {
+  let { status, message } = err
+  res.status(status).send(message)
 })
 
 app.listen(port, (req, res) => {
