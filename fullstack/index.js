@@ -97,7 +97,7 @@ app.get(
   '/listings/:id',
   wrapAsync(async (req, res) => {
     let { id } = req.params
-    let data = await listing.findById(id)
+    let data = await listing.findById(id).populate("review")
     res.render('listing.ejs', { data })
   })
 )

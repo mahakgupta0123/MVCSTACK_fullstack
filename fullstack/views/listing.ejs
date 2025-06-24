@@ -24,15 +24,50 @@
     </div>
   </div>
   <div>
-    <hr>
+    <hr />
     <form method="post" action="/listings/<%= data.id %>/reviews" class="m-4">
       <h3>leave your valuable review</h3>
       <label class="form-label" for="rating">rating</label>
-      <input type="range" min="0" max="5" class="form-range rounded-3" id="rating" name="review[rating]" required/>
-      <label  class="form-label" for="comment">comment</label>
-      <textarea type="text" class="form-control" id="comment" name="review[comment]" required></textarea>
-      <br>
+      <input
+        type="range"
+        min="0"
+        max="5"
+        class="form-range rounded-3"
+        id="rating"
+        name="review[rating]"
+        required
+      />
+      <label class="form-label" for="comment">comment</label>
+      <textarea
+        type="text"
+        class="form-control"
+        id="comment"
+        name="review[comment]"
+        required
+      ></textarea>
+      <br />
       <button class="fs-6 btn btn-outline-danger">create a review</button>
     </form>
+  </div>
+  <hr />
+  <div class="m-4">
+    <h3>all reviews</h3>
+    <% for(review of data.review){%>
+    
+    <div class="card mb-4" style="width: 18rem">
+
+      <div class="card-body">
+        <h5 class="card-title">review</h5>
+        <p class="card-text">
+          <%= review.rating%>
+        </p>
+        <p class="card-text">
+          <%= review.comment%>
+        </p>
+        <a href="#" class="btn btn-outline-danger">show more</a>
+      </div>
+    </div>
+
+    <%}%>
   </div>
 </body>
