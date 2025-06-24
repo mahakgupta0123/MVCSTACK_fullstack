@@ -7,6 +7,7 @@ const listingSchema = require('./schema')
 const port = 8080
 const mongoose = require('mongoose')
 const listing = require('./models/listings.js')
+const review = require('./models/review.js')
 const wrapAsync = require('./utils/wrapAsync.js')
 const ExpressError = require('./utils/ExpressError.js')
 const engine = require('ejs-mate')

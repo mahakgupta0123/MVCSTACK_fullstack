@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const review = require('./models/review.js')
 
 const listingSchema = new mongoose.Schema({
   title: {
@@ -28,9 +29,15 @@ const listingSchema = new mongoose.Schema({
 
   country: {
     type: String
-  }
+  },
+  review: [
+    {
+      type: Schema.Type.ObjectId,
+      ref: 'review'
+    }
+  ]
 })
 
 const listing = mongoose.model('listing', listingSchema)
 
-module.exports= listing;
+module.exports = listing
