@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const review = require('./models/review.js')
+// const review = require('review.js')
 
 const listingSchema = new mongoose.Schema({
   title: {
@@ -32,7 +32,7 @@ const listingSchema = new mongoose.Schema({
   },
   review: [
     {
-      type: Schema.Type.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'review'
     }
   ]
