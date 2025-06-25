@@ -97,7 +97,7 @@ app.get(
   '/listings/:id',
   wrapAsync(async (req, res) => {
     let { id } = req.params
-    let data = await listing.findById(id).populate("review")
+    let data = await listing.findById(id).populate('review')
     res.render('listing.ejs', { data })
   })
 )
@@ -112,16 +112,24 @@ app.get(
 )
 
 app.post('/listings/:id/reviews', async (req, res) => {
-  const foundListing = await listing.findById(req.params.id);
-  const newReview = new review(req.body.review);
-  
-  foundListing.review.push(newReview);
+  let {id}=req.params
+  const foundListing = await listing.findById(req.params.id)
+  const newReview = new review(req.body.review)
 
-  await newReview.save();
-  await foundListing.save();
+  foundListing.review.push(newReview)
 
-  res.send('New review saved');
-});
+  await newReview.save()
+  await foundListing.save()
+
+ res.redirect(`/listings/${id}`)
+})
+
+app.delete('/listings/:id/reviews/:reviewId', async (req, res) => {
+  let { id, reviewId } = req.params
+  await listing.findByIdAndUpdate(id, { $pull: { review: reviewId } })
+  await review.findByIdAndDelete(reviewId)
+ res.redirect(`/listings/${id}`)
+})
 
 app.put(
   '/listings/:id',

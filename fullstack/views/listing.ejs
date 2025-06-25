@@ -50,24 +50,24 @@
     </form>
   </div>
   <hr />
-  <div class="m-4">
-    <h3>all reviews</h3>
-    <% for(review of data.review){%>
-    
-    <div class="card mb-4" style="width: 18rem">
-
-      <div class="card-body">
-        <h5 class="card-title">review</h5>
-        <p class="card-text">
-          <%= review.rating%>
-        </p>
-        <p class="card-text">
-          <%= review.comment%>
-        </p>
-        <a href="#" class="btn btn-outline-danger">show more</a>
+  <h3 class="m-4">all reviews</h3>
+  <div class="m-4 row">
+    <% for (review of data.review) { %>
+    <div class="col-6 col-md-6 mb-3">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">@Mahak</h5>
+          <p class="card-text"><%= review.rating %> stars</p>
+          <p class="card-text"><%= review.comment %></p>
+          <form
+            method="post"
+            action="/listings/<%= data.id %>/reviews/<%= review.id %>?_method=DELETE"
+          >
+            <button class="btn btn-outline-danger mt-2">Delete</button>
+          </form>
+        </div>
       </div>
     </div>
-
-    <%}%>
+    <% } %>
   </div>
 </body>
