@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require('joi')
 
 const listingSchema = Joi.object({
   title: Joi.string().required(),
@@ -6,6 +6,6 @@ const listingSchema = Joi.object({
   image: Joi.string().required(),
   price: Joi.number().required(),
   location: Joi.string().required()
-});
+})
 
-module.exports = listingSchema;
+module.exports = listingSchema

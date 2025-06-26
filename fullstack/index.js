@@ -7,8 +7,8 @@ process.on('uncaughtException', err => {
 const port = 8080
 const mongoose = require('mongoose')
 
-const listings=require("./routes/listings.js")
-const reviews=require("./routes/review.js")
+const listings = require('./routes/listings.js')
+const reviews = require('./routes/review.js')
 const engine = require('ejs-mate')
 app.engine('ejs', engine)
 const path = require('path')
@@ -48,10 +48,8 @@ app.use((req, res, next) => {
   next()
 })
 
-
-app.use("/",listings);
-app.use("/",reviews);
-
+app.use('/', listings)
+app.use('/', reviews)
 
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, 'Page not found'))

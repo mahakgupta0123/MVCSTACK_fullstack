@@ -1,23 +1,39 @@
 <% layout('../layouts/boilerplate') %>
 
-
 <body>
   <!-- <a href="http://localhost:8080/listings/new"><button>ADD more</button></a> -->
-  <div style="display:flex; flex-wrap:wrap; gap:2rem; justify-content: center; align-items: center; vertical-align: center;">
+  <div
+    style="
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      align-items: center;
+      vertical-align: center;
+    "
+  >
     <% for(data of datas) { %>
-      <div class="card" style="width:300px; border:none">
-         <a href="http://localhost:8080/listings/<%=data.id%>"><img src="<%= data.image %>" class="card-img-top" alt="listings" target="_blank" height="250px" style="border-radius:20px"/></a>
-        <div class="card-body">
-          <p class="card-text">
-            <b><p><%= data.title %></p></b>
-            <p><%= data.description %></p>
-          </p>
-          <p class="card-text"><%= data.price %></p>
-        </div>
-        </div>
-        <% } %>
+    <div class="card" style="width: 300px; border: none">
+      <a href="http://localhost:8080/listings/<%=data.id%>"
+        ><img
+          src="<%= data.image %>"
+          class="card-img-top"
+          alt="listings"
+          target="_blank"
+          height="280px"
+          style="border-radius: 20px"
+      /></a>
+      <div class="card-body">
+        <p class="card-text">
+          <b><%= data.title %></b><br><br>
+          <%= data.description %>
+        </p>
+        <p class="card-text"><%= data.price %></p>
       </div>
-      <!-- <a href="http://localhost:8080/listings/<%=data.id%>"
+    </div>
+    <% } %>
+  </div>
+  <!-- <a href="http://localhost:8080/listings/<%=data.id%>"
         ><button>Show more</button></a
       >
       <form method="get" action="/listings/<%= data.id%>/edit">

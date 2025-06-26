@@ -1,5 +1,5 @@
-const express=require("express");
-const router=express.Router();
+const express = require('express')
+const router = express.Router()
 const listingSchema = require('../schema')
 const wrapAsync = require('../utils/wrapAsync.js')
 const ExpressError = require('../utils/ExpressError.js')
@@ -97,4 +97,4 @@ router.delete(
   })
 )
 
-module.exports=router;
+module.exports = router
