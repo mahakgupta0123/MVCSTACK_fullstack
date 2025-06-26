@@ -3,13 +3,12 @@ const app = express()
 process.on('uncaughtException', err => {
   console.error('Uncaught Exception:', err.stack)
 })
-const listingSchema = require('./schema')
+
 const port = 8080
 const mongoose = require('mongoose')
-const listing = require('./models/listings.js')
-const review = require('./models/review.js')
-const wrapAsync = require('./utils/wrapAsync.js')
-const ExpressError = require('./utils/ExpressError.js')
+
+const listings=require("./routes/listings.js")
+const reviews=require("./routes/review.js")
 const engine = require('ejs-mate')
 app.engine('ejs', engine)
 const path = require('path')
@@ -49,120 +48,10 @@ app.use((req, res, next) => {
   next()
 })
 
-const validateListings = (req, res, next) => {
-  let { error } = listingSchema.validate(req.body)
-  if (error) {
-    throw new ExpressError(400, error)
-  } else {
-    next()
-  }
-}
-app.get(
-  '/listings',
-  wrapAsync(async (req, res, next) => {
-    let datas = await listing.find()
-    res.render('index.ejs', { datas })
-    // console.log(datas);
-  })
-)
 
-// app.get('/', (req, res) => {
-//   res.send('hello, root')
-// })
+app.use("/",listings);
+app.use("/",reviews);
 
-app.get('/listings/new', (req, res) => {
-  res.render('form.ejs')
-})
-
-app.post(
-  '/listings',
-  validateListings,
-  wrapAsync(async (req, res) => {
-    const { title, description, image, price, location } = req.body
-
-    const newListing = new listing({
-      title,
-      description,
-      image,
-      price,
-      location
-    })
-
-    await newListing.save()
-    res.redirect('/listings')
-  })
-)
-
-app.get(
-  '/listings/:id',
-  wrapAsync(async (req, res) => {
-    let { id } = req.params
-    let data = await listing.findById(id).populate('review')
-    res.render('listing.ejs', { data })
-  })
-)
-
-app.get(
-  '/listings/:id/edit',
-  wrapAsync(async (req, res) => {
-    let { id } = req.params
-    let data = await listing.findById(id)
-    res.render('edit.ejs', { data })
-  })
-)
-
-app.post('/listings/:id/reviews', async (req, res) => {
-  let {id}=req.params
-  const foundListing = await listing.findById(req.params.id)
-  const newReview = new review(req.body.review)
-
-  foundListing.review.push(newReview)
-
-  await newReview.save()
-  await foundListing.save()
-
- res.redirect(`/listings/${id}`)
-})
-
-app.delete('/listings/:id/reviews/:reviewId', async (req, res) => {
-  let { id, reviewId } = req.params
-  await listing.findByIdAndUpdate(id, { $pull: { review: reviewId } })
-  await review.findByIdAndDelete(reviewId)
- res.redirect(`/listings/${id}`)
-})
-
-app.put(
-  '/listings/:id',
-  validateListings,
-  wrapAsync(async (req, res) => {
-    let { id } = req.params
-    let { title, description, image, price, location } = req.body
-    console.log(req.body)
-    let newListings = await listing.findByIdAndUpdate(
-      id,
-      {
-        title: title,
-        description: description,
-        image: image,
-        price: price,
-        location: location
-      },
-      { new: true, runValidators: true }
-    )
-    console.log(newListings)
-    res.redirect('/listings')
-  })
-)
-
-app.delete(
-  '/listings/:id',
-  wrapAsync(async (req, res) => {
-    let { id } = req.params
-    let data = await listing.findByIdAndDelete(id)
-    console.log(data)
-    res.redirect('/listings')
-  })
-)
 
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, 'Page not found'))

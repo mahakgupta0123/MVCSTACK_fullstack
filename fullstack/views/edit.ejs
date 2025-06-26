@@ -1,7 +1,7 @@
 <% layout('../layouts/boilerplate') %>
 
-<body>
-  <div class="container" style="padding: 0 200px 0 200px">
+<body class="container-md-fluid">
+  <div style="padding:0 80px 0 80px">
     <h1 class="text-left text-danger mt-3 mb-3">UPDATE YOUR LISTING</h1>
     <form method="post" action="/listings/<%= data.id %>?_method=PUT">
       title:
@@ -63,5 +63,5 @@
       </div>
         <button class="btn btn-outline-danger text-center p-3">submit and edit</button>
     </form>
-  </div>
+    </div>
 </body>
