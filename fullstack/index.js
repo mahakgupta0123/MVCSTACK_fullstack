@@ -3,6 +3,8 @@ const app = express()
 process.on('uncaughtException', err => {
   console.error('Uncaught Exception:', err.stack)
 })
+const cookieParser = require('cookie-parser')
+app.use(cookieParser())
 
 const port = 8080
 const mongoose = require('mongoose')
@@ -43,10 +45,14 @@ async function main () {
 //     res.send("saved successfully")
 // })
 
-app.use((req, res, next) => {
-  console.log('Request URL:', req.url)
-  next()
-})
+// app.use((req, res, next) => {
+//   console.log('Request URL:', req.url)
+//   next()
+// })
+
+// app.get("/",(req,res)=>{
+//   console.dir(req.cookies)
+// })
 
 app.use('/', listings)
 app.use('/', reviews)
