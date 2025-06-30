@@ -4,6 +4,7 @@ const listingSchema = require('../schema')
 const wrapAsync = require('../utils/wrapAsync.js')
 const ExpressError = require('../utils/ExpressError.js')
 const listing = require('../models/listings.js')
+const flash=require("connect-flash")
 
 const validateListings = (req, res, next) => {
   let { error } = listingSchema.validate(req.body)
@@ -42,6 +43,7 @@ router.post(
     })
 
     await newListing.save()
+    req.flash('success', 'new listings is created and added')
     res.redirect('/listings')
   })
 )
@@ -83,6 +85,7 @@ router.put(
       { new: true, runValidators: true }
     )
     console.log(newListings)
+    req.flash('success', 'listings is updated')
     res.redirect('/listings')
   })
 )
@@ -93,6 +96,7 @@ router.delete(
     let { id } = req.params
     let data = await listing.findByIdAndDelete(id)
     console.log(data)
+    req.flash('success', 'listing is deleted')
     res.redirect('/listings')
   })
 )

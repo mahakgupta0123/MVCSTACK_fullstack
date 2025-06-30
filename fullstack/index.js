@@ -3,15 +3,30 @@ const app = express()
 process.on('uncaughtException', err => {
   console.error('Uncaught Exception:', err.stack)
 })
-const cookieParser = require('cookie-parser')
-app.use(cookieParser())
-
 const port = 8080
 const mongoose = require('mongoose')
-
+const expressSession = require('express-session')
+const flash = require('connect-flash')
+const cookieParser = require('cookie-parser')
+app.use(cookieParser())
+app.use(
+  expressSession({
+    secret: 'mysecretmessage',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      //to track sessions
+      expires: Date.now() + 7 * 34 * 60 * 60 * 1000,
+      maxAge: 7 * 34 * 60 * 60 * 1000,
+      httpOnly: true //for security - crossscripting attacks.
+    }
+  })
+)
+app.use(flash())
 const listings = require('./routes/listings.js')
 const reviews = require('./routes/review.js')
 const engine = require('ejs-mate')
+
 app.engine('ejs', engine)
 const path = require('path')
 var methodOverride = require('method-override')
@@ -50,9 +65,11 @@ async function main () {
 //   next()
 // })
 
-// app.get("/",(req,res)=>{
-//   console.dir(req.cookies)
-// })
+app.use((req, res, next) => {
+  res.locals.message = req.flash('success')
+  // console.log(req.flash('success'))
+  next()
+})
 
 app.use('/', listings)
 app.use('/', reviews)
