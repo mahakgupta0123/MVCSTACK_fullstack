@@ -5,26 +5,6 @@ process.on('uncaughtException', err => {
 })
 const port = 8080
 const mongoose = require('mongoose')
-const expressSession = require('express-session')
-const flash = require('connect-flash')
-const cookieParser = require('cookie-parser')
-app.use(cookieParser())
-app.use(
-  expressSession({
-    secret: 'mysecretmessage',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      //to track sessions
-      expires: Date.now() + 7 * 34 * 60 * 60 * 1000,
-      maxAge: 7 * 34 * 60 * 60 * 1000,
-      httpOnly: true //for security - crossscripting attacks.
-    }
-  })
-)
-app.use(flash())
-const listings = require('./routes/listings.js')
-const reviews = require('./routes/review.js')
 const engine = require('ejs-mate')
 
 app.engine('ejs', engine)
@@ -46,6 +26,37 @@ async function main () {
   await mongoose.connect('mongodb://127.0.0.1:27017/airbnb')
 }
 
+const user = require('./models/user.js')
+
+const expressSession = require('express-session')
+const flash = require('connect-flash')
+const cookieParser = require('cookie-parser')
+const localstrategy = require('passport-local')
+const passport = require('passport')
+app.use(cookieParser())
+app.use(
+  expressSession({
+    secret: 'mysecretmessage',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      //to track sessions
+      expires: Date.now() + 7 * 34 * 60 * 60 * 1000,
+      maxAge: 7 * 34 * 60 * 60 * 1000,
+      httpOnly: true //for security - crossscripting attacks.
+    }
+  })
+)
+app.use(flash())
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new localstrategy(user.authenticate()))
+passport.serializeUser(user.serializeUser())
+passport.deserializeUser(user.deserializeUser())
+const listings = require('./routes/listings.js')
+const reviews = require('./routes/review.js')
+const wrapAsync = require('./utils/wrapAsync.js')
+
 // app.get('/testing', (req, res) => {
 //   const listing1 = new listing({
 //     title: 'verre di wedding 2',
@@ -66,13 +77,53 @@ async function main () {
 // })
 
 app.use((req, res, next) => {
-  res.locals.message = req.flash('success')
+  res.locals.success = req.flash('success')
+  res.locals.error = req.flash('error')
   // console.log(req.flash('success'))
   next()
 })
 
 app.use('/', listings)
 app.use('/', reviews)
+
+app.get('/signup', (req, res) => {
+  res.render('signup.ejs')
+})
+
+app.post(
+  '/signup',
+  wrapAsync(async (req, res) => {
+    try {
+      let { email, username, password } = req.body
+      const user1 = new user({
+        email,
+        username
+      })
+      await user.register(user1, password)
+      req.flash('success', 'signup successfully')
+      res.redirect('/listings')
+    } catch (err) {
+      req.flash('error', err.message)
+      res.redirect('/signup')
+    }
+  })
+)
+
+app.get('/login', (req, res) => {
+  res.render('login.ejs')
+})
+
+app.post(
+  '/login',
+  passport.authenticate('local', {
+    failureRedirect: '/login',
+    failureFlash: true,
+  }),
+  async (req, res) => {
+    req.flash('success', 'login successfully')
+    res.redirect('/listings')
+  }
+)
 
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, 'Page not found'))

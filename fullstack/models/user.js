@@ -8,7 +8,7 @@ let userSchema = new mongoose.Schema({
   },
 })
 
-user.plugin(passportlocalmongoose)
+userSchema.plugin(passportlocalmongoose)
 let user = mongoose.model('user', userSchema)
 
-module.exports = review
+module.exports = user

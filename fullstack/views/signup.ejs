@@ -1,0 +1,50 @@
+<% layout('../layouts/boilerplate') %>
+<body>
+  <form
+    class="row"
+    method="post"
+    action="/signup"
+    style="padding: 0 80px 0 80px"
+  >
+    <h1>Signup</h1>
+    <div class="col-6">
+      <br />
+      <label for="username">Username</label>
+      <input
+        type="text"
+        name="username"
+        id="username"
+        placeholder="enter your username"
+        class="rounded-5 p-2 border form-control"
+        required
+      /><br /><br />
+    </div>
+    <div class="col-6">
+      <br />
+      <label for="password">password</label>
+      <input
+        type="password"
+        name="password"
+        id="password"
+        placeholder="enter your password"
+        class="rounded-5 p-2 border form-control"
+        required
+      /><br /><br />
+    </div>
+    <div class="col-12">
+      <label for="email">email:</label>
+      <input
+        name="email"
+        type="text"
+        id="email"
+        placeholder="enter the email"
+        class="rounded-5 p-2 border form-control"
+        required
+      /><br /><br />
+    </div>
+    <div class="col-12">
+      <button class="btn btn-outline-danger" type="submit">Submit form</button>
+    </div>
+  </form>
+  <!-- <script src="../public/js/script.js"></script> -->
+</body>
