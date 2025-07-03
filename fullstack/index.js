@@ -117,13 +117,28 @@ app.post(
   '/login',
   passport.authenticate('local', {
     failureRedirect: '/login',
-    failureFlash: true,
+    failureFlash: true
   }),
   async (req, res) => {
     req.flash('success', 'login successfully')
     res.redirect('/listings')
   }
 )
+
+app.get('/logout', (req, res, next) => {
+  req.logout(err => {
+    if (!req.isAuthenticated()) {
+      req.flash('error', 'you need to logged it first')
+      return res.redirect('/login')
+    }
+    if (err) {
+      req.flash('error', err.message)
+      return next(err)
+    }
+    req.flash('success', 'You logged out')
+    return res.redirect('/listings')
+  })
+})
 
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, 'Page not found'))

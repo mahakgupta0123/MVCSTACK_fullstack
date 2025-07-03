@@ -4,7 +4,7 @@ const listingSchema = require('../schema')
 const wrapAsync = require('../utils/wrapAsync.js')
 const ExpressError = require('../utils/ExpressError.js')
 const listing = require('../models/listings.js')
-const flash=require("connect-flash")
+const flash = require('connect-flash')
 
 const validateListings = (req, res, next) => {
   let { error } = listingSchema.validate(req.body)
@@ -25,6 +25,10 @@ router.get(
 )
 
 router.get('/listings/new', (req, res) => {
+  if (!req.isAuthenticated()) {
+    req.flash('error', 'you need to logged it first')
+    return res.redirect('/login')
+  }
   res.render('form.ejs')
 })
 
@@ -32,6 +36,10 @@ router.post(
   '/listings',
   validateListings,
   wrapAsync(async (req, res) => {
+    if (!req.isAuthenticated()) {
+      req.flash('error', 'you need to logged it first')
+      return res.redirect('/login')
+    }
     const { title, description, image, price, location } = req.body
 
     const newListing = new listing({
@@ -60,6 +68,10 @@ router.get(
 router.get(
   '/listings/:id/edit',
   wrapAsync(async (req, res) => {
+    if (!req.isAuthenticated()) {
+      req.flash('error', 'you need to logged it first')
+      return res.redirect('/login')
+    }
     let { id } = req.params
     let data = await listing.findById(id)
     res.render('edit.ejs', { data })
@@ -93,6 +105,10 @@ router.put(
 router.delete(
   '/listings/:id',
   wrapAsync(async (req, res) => {
+    if (!req.isAuthenticated()) {
+      req.flash('error', 'you need to logged it first')
+      return res.redirect('/login')
+    }
     let { id } = req.params
     let data = await listing.findByIdAndDelete(id)
     console.log(data)
