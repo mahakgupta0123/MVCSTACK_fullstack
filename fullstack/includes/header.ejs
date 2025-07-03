@@ -43,11 +43,24 @@
             <li class="nav-item">
               <a class="nav-link" href="/listings/new">ADD</a>
             </li>
-            <!-- <li class="nav-item ms-3">
-              <button type="button" class="btn btn-outline-danger fs-6 p-2">
-                Explore >
-              </button>
-            </li> -->
+            <% if(currentUser===undefined){ %>
+            <li class="nav-item ms-3">
+              <form method="get" action="/signup">
+                <button class="btn btn-outline-danger">signup</button>
+              </form>
+            </li>
+            <li class="nav-item ms-3">
+              <form method="get" action="/login">
+                <button class="btn btn-outline-danger">login</button>
+              </form>
+            </li>
+            <%} else { %>
+            <li class="nav-item ms-3">
+              <form method="get" action="/logout">
+                <button class="btn btn-outline-danger">logout</button>
+              </form>
+            </li>
+            <%}%>
           </ul>
         </div>
       </div>

@@ -79,6 +79,7 @@ const wrapAsync = require('./utils/wrapAsync.js')
 app.use((req, res, next) => {
   res.locals.success = req.flash('success')
   res.locals.error = req.flash('error')
+  res.locals.currentUser = req.user
   // console.log(req.flash('success'))
   next()
 })
@@ -95,19 +96,24 @@ app.post(
   wrapAsync(async (req, res) => {
     try {
       let { email, username, password } = req.body
-      const user1 = new user({
-        email,
-        username
+      const user1 = new user({ email, username })
+      let registeredUser = await user.register(user1, password)
+
+      req.logIn(registeredUser, err => {
+        if (err) {
+          req.flash('error', err.message)
+          return res.redirect('/login')
+        }
+        req.flash('success', 'Signup successful')
+        return res.redirect('/listings') 
       })
-      await user.register(user1, password)
-      req.flash('success', 'signup successfully')
-      res.redirect('/listings')
     } catch (err) {
       req.flash('error', err.message)
       res.redirect('/signup')
     }
   })
 )
+
 
 app.get('/login', (req, res) => {
   res.render('login.ejs')
