@@ -1,16 +1,19 @@
 <% layout('../layouts/boilerplate') %>
 
-<body style="padding:0 50px 0 80px">
+<body style="padding: 0 100px 0 100px">
   <h1 class="px-4"><%= data.title %></h1>
-  <h5 class="text-secondary px-4"><%= data.description %></h5>
+  <h5 class="text-secondary px-4">
+    <u><%= data.owner.username %></u> <%= data.description %>
+  </h5>
   <div>
     <img
       src="<%= data.image %>"
-      height="300px"
+      height="500px"
       width="90%"
       class="rounded-5 mb-3 mx-3"
     />
   </div>
+  <% if(currentUser._id.equals(data.owner._id)){%>
   <div class="d-flex gap-3">
     <div class="mx-4 mb-4">
       <form method="get" action="/listings/<%= data.id%>/edit">
@@ -24,6 +27,8 @@
     </div>
   </div>
   <div>
+    <%}%>
+
     <hr />
     <form method="post" action="/listings/<%= data.id %>/reviews" class="m-4">
       <h3>leave your valuable review</h3>

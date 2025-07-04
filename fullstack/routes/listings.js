@@ -42,13 +42,15 @@ router.post(
     }
     const { title, description, image, price, location } = req.body
 
-    const newListing = new listing({
+    let newListing = new listing({
       title,
       description,
       image,
       price,
       location
     })
+    console.log(req.user._id)
+    newListing.owner=req.user._id
 
     await newListing.save()
     req.flash('success', 'new listings is created and added')
@@ -60,7 +62,7 @@ router.get(
   '/listings/:id',
   wrapAsync(async (req, res) => {
     let { id } = req.params
-    let data = await listing.findById(id).populate('review')
+    let data = await listing.findById(id).populate('review').populate('owner')
     res.render('listing.ejs', { data })
   })
 )
