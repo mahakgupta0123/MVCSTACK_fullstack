@@ -24,7 +24,7 @@ router.post(
     const newReview = new review(req.body.review)
 
     foundListing.review.push(newReview)
-
+    
     await newReview.save()
     await foundListing.save()
     req.flash('success', 'new review is created and added')

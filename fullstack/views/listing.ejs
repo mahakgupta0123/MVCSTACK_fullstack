@@ -13,7 +13,7 @@
       class="rounded-5 mb-3 mx-3"
     />
   </div>
-  <% if(currentUser._id.equals(data.owner._id)){%>
+  <% if(currentUser && currentUser._id.equals(data.owner._id)){%>
   <div class="d-flex gap-3">
     <div class="mx-4 mb-4">
       <form method="get" action="/listings/<%= data.id%>/edit">
@@ -27,9 +27,8 @@
     </div>
   </div>
   <div>
-    <%}%>
-
     <hr />
+   
     <form method="post" action="/listings/<%= data.id %>/reviews" class="m-4">
       <h3>leave your valuable review</h3>
       <label class="form-label" for="rating">rating</label>
@@ -55,6 +54,7 @@
     </form>
   </div>
   <hr />
+ <% }%>
   <h3 class="m-4">all reviews</h3>
   <div class="m-4 row">
     <% for (review of data.review) { %>

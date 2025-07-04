@@ -50,7 +50,7 @@ router.post(
       location
     })
     console.log(req.user._id)
-    newListing.owner=req.user._id
+    newListing.owner = req.user._id
 
     await newListing.save()
     req.flash('success', 'new listings is created and added')
@@ -62,6 +62,14 @@ router.get(
   '/listings/:id',
   wrapAsync(async (req, res) => {
     let { id } = req.params
+    // let listings = await listing.findById(id)
+    // if (!res.locals.currentUser || !listings.owner.equals(res.locals.currentUser._id)) {
+    //   req.flash(
+    //     'error',
+    //     "you don't have permissions as you don't owned that listings"
+    //   )
+    //   return res.redirect(`/listings`)
+    // }
     let data = await listing.findById(id).populate('review').populate('owner')
     res.render('listing.ejs', { data })
   })
@@ -75,6 +83,14 @@ router.get(
       return res.redirect('/login')
     }
     let { id } = req.params
+    let listings = await listing.findById(id)
+    if (!res.locals.currentUser || !listings.owner.equals(res.locals.currentUser._id)) {
+      req.flash(
+        'error',
+        "you don't have permissions as you don't owned that listings"
+      )
+      return res.redirect(`/listings/${id}`)
+    }
     let data = await listing.findById(id)
     res.render('edit.ejs', { data })
   })
@@ -87,6 +103,14 @@ router.put(
     let { id } = req.params
     let { title, description, image, price, location } = req.body
     console.log(req.body)
+    let listings = await listing.findById(id)
+    if (!res.locals.currentUser || !listings.owner.equals(res.locals.currentUser._id)) {
+      req.flash(
+        'error',
+        "you don't have permissions as you don't owned that listings"
+      )
+      return res.redirect(`/listings/${id}`)
+    }
     let newListings = await listing.findByIdAndUpdate(
       id,
       {
@@ -112,6 +136,14 @@ router.delete(
       return res.redirect('/login')
     }
     let { id } = req.params
+    let listings = await listing.findById(id)
+    if (!res.locals.currentUser || !listings.owner.equals(res.locals.currentUser._id)) {
+      req.flash(
+        'error',
+        "you don't have permissions as you don't owned that listings"
+      )
+      return res.redirect(`/listings/${id}`)
+    }
     let data = await listing.findByIdAndDelete(id)
     console.log(data)
     req.flash('success', 'listing is deleted')
