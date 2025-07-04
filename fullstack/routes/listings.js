@@ -70,7 +70,10 @@ router.get(
     //   )
     //   return res.redirect(`/listings`)
     // }
-    let data = await listing.findById(id).populate('review').populate('owner')
+    let data = await listing
+      .findById(id)
+      .populate({ path: 'review', populate: { path: 'author' } })
+      .populate('owner')
     res.render('listing.ejs', { data })
   })
 )
@@ -84,7 +87,10 @@ router.get(
     }
     let { id } = req.params
     let listings = await listing.findById(id)
-    if (!res.locals.currentUser || !listings.owner.equals(res.locals.currentUser._id)) {
+    if (
+      !res.locals.currentUser ||
+      !listings.owner.equals(res.locals.currentUser._id)
+    ) {
       req.flash(
         'error',
         "you don't have permissions as you don't owned that listings"
@@ -104,7 +110,10 @@ router.put(
     let { title, description, image, price, location } = req.body
     console.log(req.body)
     let listings = await listing.findById(id)
-    if (!res.locals.currentUser || !listings.owner.equals(res.locals.currentUser._id)) {
+    if (
+      !res.locals.currentUser ||
+      !listings.owner.equals(res.locals.currentUser._id)
+    ) {
       req.flash(
         'error',
         "you don't have permissions as you don't owned that listings"
@@ -137,7 +146,10 @@ router.delete(
     }
     let { id } = req.params
     let listings = await listing.findById(id)
-    if (!res.locals.currentUser || !listings.owner.equals(res.locals.currentUser._id)) {
+    if (
+      !res.locals.currentUser ||
+      !listings.owner.equals(res.locals.currentUser._id)
+    ) {
       req.flash(
         'error',
         "you don't have permissions as you don't owned that listings"
