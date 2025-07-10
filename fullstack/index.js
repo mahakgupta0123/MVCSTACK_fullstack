@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV != 'production') {
+  require('dotenv').config()
+}
+
 const express = require('express')
 const app = express()
 process.on('uncaughtException', err => {
@@ -105,7 +109,7 @@ app.post(
           return res.redirect('/login')
         }
         req.flash('success', 'Signup successful')
-        return res.redirect('/listings') 
+        return res.redirect('/listings')
       })
     } catch (err) {
       req.flash('error', err.message)
@@ -113,7 +117,6 @@ app.post(
     }
   })
 )
-
 
 app.get('/login', (req, res) => {
   res.render('login.ejs')

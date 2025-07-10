@@ -5,6 +5,8 @@ const wrapAsync = require('../utils/wrapAsync.js')
 const ExpressError = require('../utils/ExpressError.js')
 const listing = require('../models/listings.js')
 const flash = require('connect-flash')
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 const validateListings = (req, res, next) => {
   let { error } = listingSchema.validate(req.body)
@@ -32,31 +34,36 @@ router.get('/listings/new', (req, res) => {
   res.render('form.ejs')
 })
 
-router.post(
-  '/listings',
-  validateListings,
-  wrapAsync(async (req, res) => {
-    if (!req.isAuthenticated()) {
-      req.flash('error', 'you need to logged it first')
-      return res.redirect('/login')
-    }
-    const { title, description, image, price, location } = req.body
+// router.post(
+//   '/listings',
+//   validateListings,
+//   wrapAsync(async (req, res) => {
+//     if (!req.isAuthenticated()) {
+//       req.flash('error', 'you need to logged it first')
+//       return res.redirect('/login')
+//     }
+//     const { title, description, image, price, location } = req.body
 
-    let newListing = new listing({
-      title,
-      description,
-      image,
-      price,
-      location
-    })
-    console.log(req.user._id)
-    newListing.owner = req.user._id
+//     let newListing = new listing({
+//       title,
+//       description,
+//       image,
+//       price,
+//       location
+//     })
+//     console.log(req.user._id)
+//     newListing.owner = req.user._id
+//     // console.log(req.file)
 
-    await newListing.save()
-    req.flash('success', 'new listings is created and added')
-    res.redirect('/listings')
-  })
-)
+//     await newListing.save()
+//     req.flash('success', 'new listings is created and added')
+//     res.redirect('/listings')
+//   })
+// )
+
+router.post("/listings",upload.single('image'),(req,res)=>{
+  res.send(req.file)
+})
 
 router.get(
   '/listings/:id',
