@@ -1,12 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const listingSchema = require('../schema')
+const listingSchema = require('../listingSchema.js')
 const wrapAsync = require('../utils/wrapAsync.js')
 const ExpressError = require('../utils/ExpressError.js')
 const listing = require('../models/listings.js')
 const flash = require('connect-flash')
-const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const multer = require('multer')
+const { storage } = require('../cloud_config.js')
+const upload = multer({ storage })
 
 const validateListings = (req, res, next) => {
   let { error } = listingSchema.validate(req.body)
@@ -34,36 +35,42 @@ router.get('/listings/new', (req, res) => {
   res.render('form.ejs')
 })
 
-// router.post(
-//   '/listings',
-//   validateListings,
-//   wrapAsync(async (req, res) => {
-//     if (!req.isAuthenticated()) {
-//       req.flash('error', 'you need to logged it first')
-//       return res.redirect('/login')
-//     }
-//     const { title, description, image, price, location } = req.body
+router.post(
+  '/listings',
+  upload.single('image'),
+  validateListings,
+  wrapAsync(async (req, res) => {
+    if (!req.isAuthenticated()) {
+      req.flash('error', 'you need to logged it first')
+      return res.redirect('/login')
+    }
+    const { title, description, image, price, location } = req.body
 
-//     let newListing = new listing({
-//       title,
-//       description,
-//       image,
-//       price,
-//       location
-//     })
-//     console.log(req.user._id)
-//     newListing.owner = req.user._id
-//     // console.log(req.file)
+    let newListing = new listing({
+      title,
+      description,
+      image,
+      price,
+      location
+    })
 
-//     await newListing.save()
-//     req.flash('success', 'new listings is created and added')
-//     res.redirect('/listings')
-//   })
-// )
+    let url = req.file.path || req.file.url
+    let filename = req.file.filename
+    if (!req.file) {
+      req.flash('error', 'Image is required')
+      return res.redirect('/listings/new')
+    }
 
-router.post("/listings",upload.single('image'),(req,res)=>{
-  res.send(req.file)
-})
+    console.log(req.user._id)
+    newListing.owner = req.user._id
+    // console.log(req.file)
+    newListing.image = { url, filename }
+
+    await newListing.save()
+    req.flash('success', 'new listings is created and added')
+    res.redirect('/listings')
+  })
+)
 
 router.get(
   '/listings/:id',

@@ -14,7 +14,8 @@ const listingSchema = new mongoose.Schema({
   },
 
   image: {
-    type: String
+    url: String,
+    filename:String
   },
 
   price: {
@@ -39,7 +40,7 @@ const listingSchema = new mongoose.Schema({
   ],
   owner:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:user
+    ref:'user'
   }
 })
 
