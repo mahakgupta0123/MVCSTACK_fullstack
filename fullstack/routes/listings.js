@@ -118,6 +118,7 @@ router.get(
 
 router.put(
   '/listings/:id',
+  upload.single('image'),
   validateListings,
   wrapAsync(async (req, res) => {
     let { id } = req.params
@@ -145,6 +146,13 @@ router.put(
       },
       { new: true, runValidators: true }
     )
+    if (req.file) {
+      let url = req.file.path || req.file.url
+      let filename = req.file.filename
+      newListings.image = { url, filename }
+      await newListings.save()
+    }
+
     console.log(newListings)
     req.flash('success', 'listings is updated')
     res.redirect('/listings')

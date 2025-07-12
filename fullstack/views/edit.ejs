@@ -3,7 +3,11 @@
 <body class="container-md-fluid">
   <div style="padding: 0 80px 0 80px">
     <h1 class="text-left text-danger mt-3 mb-3">UPDATE YOUR LISTING</h1>
-    <form method="post" action="/listings/<%= data.id %>?_method=PUT">
+    <form
+      method="post"
+      action="/listings/<%= data.id %>?_method=PUT"
+      enctype="multipart/form-data"
+    >
       title:
       <textarea
         class="form-control rounded-2 p-2"
@@ -23,16 +27,13 @@
       >
  <%=data.description %></textarea
       ><br /><br />
-      image:<textarea
+      image:<input
         style="padding: 10px"
         class="form-control rounded-2"
-        type="text"
+        type="file"
         name="image"
         placeholder="edit your title"
-        required
-      >
- <%=data.image %></textarea
-      ><br /><br />
+      /><br /><br />
       <div class="row">
         <div class="col-6">
           price:
