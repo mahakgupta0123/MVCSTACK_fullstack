@@ -27,27 +27,40 @@ main()
   .catch(err => console.log(err))
 
 async function main () {
-  await mongoose.connect('mongodb://127.0.0.1:27017/airbnb')
+  await mongoose.connect(process.env.MONGO_ATLAS)
 }
 
 const user = require('./models/user.js')
 
 const expressSession = require('express-session')
+const MongoStore = require('connect-mongo')
 const flash = require('connect-flash')
 const cookieParser = require('cookie-parser')
 const localstrategy = require('passport-local')
 const passport = require('passport')
 app.use(cookieParser())
+const store = MongoStore.create({
+  crypto: {
+    secret: process.env.SECRET
+  },
+  touchAfter: 24 * 3600,
+  mongoUrl: process.env.MONGO_ATLAS
+})
+
+store.on('error', err => {
+  console.log('Error in Mongo session store:', err)
+})
+
 app.use(
   expressSession({
-    secret: 'mysecretmessage',
+    store: store,
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
-      //to track sessions
       expires: Date.now() + 7 * 34 * 60 * 60 * 1000,
       maxAge: 7 * 34 * 60 * 60 * 1000,
-      httpOnly: true //for security - crossscripting attacks.
+      httpOnly: true
     }
   })
 )
