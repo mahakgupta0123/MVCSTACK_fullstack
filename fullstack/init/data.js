@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '../.env' })  // ✅ tell dotenv where to look
 const mongoose = require('mongoose')
 const listing = require('../models/listings.js')
 const data = require('./init.js')
@@ -9,7 +10,7 @@ main()
   .catch(err => console.log(err))
 
 async function main () {
-  await mongoose.connect('mongodb://127.0.0.1:27017/airbnb')
+  await mongoose.connect(process.env.MONGO_ATLAS)
 }
 
 const data1 = async () => {
