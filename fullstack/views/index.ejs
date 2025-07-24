@@ -14,7 +14,7 @@
   >
     <% for(data of datas) { %>
     <div class="card" style="width: 300px; border: none">
-      <a href="https://mylegacy.onrender.com/listings/<%=data.id%>"
+      <a href="http://localhost:8080/listings/<%=data.id%>"
         ><img
           src="<%= data.image.url %>"
           class="card-img-top"
@@ -28,7 +28,7 @@
           <b><%= data.title %></b><br /><br />
           <%= data.description %>
         </p>
-        <p class="card-text"><%= data.price %></p>
+        <p class="card-text">&#8377;<%= data.price %></p>
       </div>
     </div>
     <% } %>

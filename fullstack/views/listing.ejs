@@ -1,16 +1,18 @@
 <% layout('../layouts/boilerplate') %>
 
 <body style="padding: 0 100px 0 100px">
+  <div style="display: flex; justify-content: start; align-items: start; flex-wrap: wrap; padding:0 0 0 160px">
   <h1 class="px-4"><%= data.title %></h1>
   <h5 class="text-secondary px-4">
-    <u><%= data.owner.username %></u> <%= data.description %>
-  </h5>
-  <div>
+    <u>Listed by: <%= data.owner.username %></u> <br><br> <%= data.description %>
+  </h5></div><br>
+  <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
     <img
       src="<%= data.image.url %>"
-      height="500px"
-      width="90%"
+      height="400px"
+      width="70%"
       class="rounded-5 mb-3 mx-3"
+      style="box-shadow: 5px 5px 10px rgba(0,0,0,0.5);"
     />
   </div>
   <% if(currentUser && currentUser._id.equals(data.owner._id)){%>
