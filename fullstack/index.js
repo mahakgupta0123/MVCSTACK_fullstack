@@ -154,6 +154,7 @@ app.get('/logout', (req, res, next) => {
       req.flash('error', 'you need to logged it first')
       return res.redirect('/login')
     }
+
     if (err) {
       req.flash('error', err.message)
       return next(err)
@@ -166,6 +167,7 @@ app.get('/logout', (req, res, next) => {
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, 'Page not found'))
 })
+
 
 app.use((err, req, res, next) => {
   let { status = 500, message = 'Something went wrong' } = err
